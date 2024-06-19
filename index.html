@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PortalPoint - Minecraft Coordinate Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      padding: 20px;
+      background-color: #f3f3f3;
+      /* Light gray background */
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+      /* Green header */
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: #ffffff;
+      /* White form background */
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      transition: opacity 0.3s ease;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      text-align: center;
+      /* Center align label text */
+    }
+
+    .form-group input,
+    .form-group select {
+      width: calc(100% - 22px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      /* Light gray border */
+      border-radius: 8px;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+      background-color: #f9f9f9;
+      /* Light gray input background */
+    }
+
+    .form-group input:invalid {
+      border-color: #ff8080;
+      /* Light red border on invalid */
+    }
+
+    .form-group.error {
+      animation: pulse 0.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.02);
+      }
+    }
+
+    button {
+      background-color: #4CAF50;
+      /* Green button */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      font-size: 16px;
+      margin: 20px auto 0;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      /* Darker green on hover */
+    }
+
+    #result {
+      border: 1px solid #ccc;
+      /* Light gray border */
+      padding: 20px;
+      margin-top: 15px;
+      border-radius: 8px;
+      font-size: 18px;
+      text-align: center;
+      background: #ffffff;
+      /* White result background */
+      animation: slideIn 0.5s forwards;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error {
+      color: #ff8080;
+      /* Light red error message */
+      font-size: 14px;
+      margin-top: 5px;
+      text-align: center;
+      transition: opacity 0.3s ease;
+    }
+
+    @media screen and (max-width: 600px) {
+      form {
+        width: 100%;
+      }
+    }
+  </style>
+  <script>
+    function validateInput(input) {
+      return !isNaN(input) && input >= 0 && input <= 10000;
+    }
+
+    function convert(event) {
+      event.preventDefault();
+
+      const inputX = parseInt(document.getElementById('inputX').value);
+      const inputY = parseInt(document.getElementById('inputY').value);
+      const inputZ = parseInt(document.getElementById('inputZ').value);
+      const type = document.getElementById('conversionType').value;
+      let resultX, resultY, resultZ;
+      let hasError = false; // Track if there are any errors
+
+      // Reset error messages and borders
+      document.getElementById('errorX').innerHTML = '';
+      document.getElementById('errorY').innerHTML = '';
+      document.getElementById('errorZ').innerHTML = '';
+      document.getElementById('inputX').style.borderColor = '#ccc';
+      document.getElementById('inputY').style.borderColor = '#ccc';
+      document.getElementById('inputZ').style.borderColor = '#ccc';
+
+      // Check each input for validity and display errors if necessary
+      if (isNaN(inputX) || inputX < 0 || inputX > 10000 || inputX.toString().trim() === '') {
+        document.getElementById('errorX').innerHTML = 'Please enter valid integers between 0 and 10000';
+        document.getElementById('inputX').style.borderColor = '#ff8080'; /* Light red border on error */
+        document.getElementById('inputX').parentElement.classList.add('error');
+        hasError = true;
+      } else {
+        document.getElementById('inputX').parentElement.classList.remove('error');
+      }
+
+      if (isNaN(inputY) || inputY < 0 || inputY > 10000 || inputY.toString().trim() === '') {
+        document.getElementById('errorY').innerHTML = 'Please enter valid integers between 0 and 10000';
+        document.getElementById('inputY').style.borderColor = '#ff8080'; /* Light red border on error */
+        document.getElementById('inputY').parentElement.classList.add('error');
+        hasError = true;
+      } else {
+        document.getElementById('inputY').parentElement.classList.remove('error');
+      }
+
+      if (isNaN(inputZ) || inputZ < 0 || inputZ > 10000 || inputZ.toString().trim() === '') {
+        document.getElementById('errorZ').innerHTML = 'Please enter valid integers between 0 and 10000';
+        document.getElementById('inputZ').style.borderColor = '#ff8080'; /* Light red border on error */
+        document.getElementById('inputZ').parentElement.classList.add('error');
+        hasError = true;
+      } else {
+        document.getElementById('inputZ').parentElement.classList.remove('error');
+      }
+
+      if (hasError) {
+        // If there are errors, return without further processing
+        return;
+      }
+
+      // Perform conversion based on type selected
+      if (type === 'overworld') {
+        resultX = inputX / 8;
+        resultY = inputY;
+        resultZ = inputZ / 8;
+      } else {
+        resultX = inputX * 8;
+        resultY = inputY;
+        resultZ = inputZ * 8;
+      }
+
+      // Display the result with animation
+      document.getElementById('result').innerHTML = `Result: X=${resultX.toFixed(2)}, Y=${resultY}, Z=${resultZ.toFixed(2)}`;
+      document.getElementById('result').style.animation = 'slideIn 0.5s forwards';
+    }
+  </script>
+</head>
+
+<body>
+  <h1>PortalPoint - Minecraft Coordinate Converter</h1>
+  <form>
+    <div class="form-group">
+      <label for="inputX">X:</label>
+      <input type="number" id="inputX" placeholder="Enter coordinate" aria-label="Enter X coordinate"
+        title="Enter the X coordinate">
+      <div id="errorX" class="error"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="inputY">Y:</label>
+      <input type="number" id="inputY" placeholder="Enter coordinate" aria-label="Enter Y coordinate"
+        title="Enter the Y coordinate">
+      <div id="errorY" class="error"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="inputZ">Z:</label>
+      <input type="number" id="inputZ" placeholder="Enter coordinate" aria-label="Enter Z coordinate"
+        title="Enter the Z coordinate">
+      <div id="errorZ" class="error"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="conversionType">Conversion Type:</label>
+      <select id="conversionType">
+        <option value="overworld">Overworld to Nether</option>
+        <option value="nether">Nether to Overworld</option>
+      </select>
+    </div>
+
+    <button onclick="convert(event)">Convert</button>
+  </form>
+
+  <div id="result"></div>
+</body>
+
+</html>
