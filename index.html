@@ -154,42 +154,30 @@
       event.preventDefault();
 
       const inputX = parseInt(document.getElementById('inputX').value);
-      const inputY = parseInt(document.getElementById('inputY').value);
       const inputZ = parseInt(document.getElementById('inputZ').value);
       const type = document.getElementById('conversionType').value;
-      let resultX, resultY, resultZ;
-      let hasError = false; // Track if there are any errors
+      let resultX, resultZ;
+      let hasError = false;
 
       // Reset error messages and borders
       document.getElementById('errorX').innerHTML = '';
-      document.getElementById('errorY').innerHTML = '';
       document.getElementById('errorZ').innerHTML = '';
       document.getElementById('inputX').style.borderColor = '#ccc';
-      document.getElementById('inputY').style.borderColor = '#ccc';
       document.getElementById('inputZ').style.borderColor = '#ccc';
 
       // Check each input for validity and display errors if necessary
       if (isNaN(inputX) || inputX < 0 || inputX > 10000 || inputX.toString().trim() === '') {
         document.getElementById('errorX').innerHTML = 'Please enter valid integers between 0 and 10000';
-        document.getElementById('inputX').style.borderColor = '#ff8080'; /* Light red border on error */
+        document.getElementById('inputX').style.borderColor = '#ff8080';
         document.getElementById('inputX').parentElement.classList.add('error');
         hasError = true;
       } else {
         document.getElementById('inputX').parentElement.classList.remove('error');
       }
 
-      if (isNaN(inputY) || inputY < 0 || inputY > 10000 || inputY.toString().trim() === '') {
-        document.getElementById('errorY').innerHTML = 'Please enter valid integers between 0 and 10000';
-        document.getElementById('inputY').style.borderColor = '#ff8080'; /* Light red border on error */
-        document.getElementById('inputY').parentElement.classList.add('error');
-        hasError = true;
-      } else {
-        document.getElementById('inputY').parentElement.classList.remove('error');
-      }
-
       if (isNaN(inputZ) || inputZ < 0 || inputZ > 10000 || inputZ.toString().trim() === '') {
         document.getElementById('errorZ').innerHTML = 'Please enter valid integers between 0 and 10000';
-        document.getElementById('inputZ').style.borderColor = '#ff8080'; /* Light red border on error */
+        document.getElementById('inputZ').style.borderColor = '#ff8080';
         document.getElementById('inputZ').parentElement.classList.add('error');
         hasError = true;
       } else {
@@ -197,23 +185,20 @@
       }
 
       if (hasError) {
-        // If there are errors, return without further processing
         return;
       }
 
       // Perform conversion based on type selected
       if (type === 'overworld') {
         resultX = inputX / 8;
-        resultY = inputY;
         resultZ = inputZ / 8;
       } else {
         resultX = inputX * 8;
-        resultY = inputY;
         resultZ = inputZ * 8;
       }
 
       // Display the result with animation
-      document.getElementById('result').innerHTML = `Result: X=${resultX.toFixed(2)}, Y=${resultY}, Z=${resultZ.toFixed(2)}`;
+      document.getElementById('result').innerHTML = `Result: X=${resultX.toFixed(2)}, Z=${resultZ.toFixed(2)}`;
       document.getElementById('result').style.animation = 'slideIn 0.5s forwards';
     }
   </script>
@@ -227,13 +212,6 @@
       <input type="number" id="inputX" placeholder="Enter coordinate" aria-label="Enter X coordinate"
         title="Enter the X coordinate">
       <div id="errorX" class="error"></div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputY">Y:</label>
-      <input type="number" id="inputY" placeholder="Enter coordinate" aria-label="Enter Y coordinate"
-        title="Enter the Y coordinate">
-      <div id="errorY" class="error"></div>
     </div>
 
     <div class="form-group">
